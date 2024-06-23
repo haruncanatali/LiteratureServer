@@ -1,5 +1,6 @@
 ﻿using LiteratureServer.Application.Common.Exceptions;
 using LiteratureServer.Application.Common.Interfaces;
+using LiteratureServer.Application.Common.Managers;
 using LiteratureServer.Application.Common.Models;
 using LiteratureServer.Domain.Identity;
 using MediatR;
@@ -14,14 +15,14 @@ namespace LiteratureServer.Application.Users.Commands.DeleteUser
         public class DeleteCategoryCommandHandler : IRequestHandler<DeleteUserCommand, BaseResponseModel<Unit>>
         {
             private readonly IApplicationContext _context;
-            private readonly ICurrentUserService _currentUserService;
             private readonly UserManager<User> _userManager;
+            private readonly FileManager _fileManager;
 
-            public DeleteCategoryCommandHandler(IApplicationContext context, ICurrentUserService currentUserService, UserManager<User> userManager)
+            public DeleteCategoryCommandHandler(IApplicationContext context, UserManager<User> userManager, FileManager fileManager)
             {
                 _context = context;
-                _currentUserService = currentUserService;
                 _userManager = userManager;
+                _fileManager = fileManager;
             }
 
             public async Task<BaseResponseModel<Unit>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
@@ -33,7 +34,8 @@ namespace LiteratureServer.Application.Users.Commands.DeleteUser
                 {
                     throw new BadRequestException($"Silinmek istenen kullanıcı bulunamadı. ID:{request.Id}");
                 }
-
+                
+                _fileManager.Delete(entity.ProfilePhoto);
                 await _userManager.DeleteAsync(entity);
                 
                 await _context.SaveChangesAsync(cancellationToken);

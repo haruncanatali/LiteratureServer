@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LiteratureServer.Application.Common.Exceptions;
 using LiteratureServer.Application.Common.Interfaces;
+using LiteratureServer.Application.Common.Managers;
 using LiteratureServer.Application.Common.Models;
 using LiteratureServer.Domain.Entities;
 using MediatR;
@@ -19,10 +20,12 @@ namespace LiteratureServer.Application.Authors.Commands.Delete
         public class Handler : IRequestHandler<DeleteAuthorCommand, BaseResponseModel<Unit>>
         {
             private readonly IApplicationContext _context;
+            private readonly FileManager _fileManager;
 
-            public Handler(IApplicationContext applicationContext)
+            public Handler(IApplicationContext applicationContext, FileManager fileManager)
             {
                 _context = applicationContext;
+                _fileManager = fileManager;
             }
 
             public async Task<BaseResponseModel<Unit>> Handle(DeleteAuthorCommand request, CancellationToken cancellationToken)
@@ -41,8 +44,8 @@ namespace LiteratureServer.Application.Authors.Commands.Delete
                     _context.Literaries.RemoveRange(author.Literaries);
                     await _context.SaveChangesAsync(cancellationToken);
                 }
-
-                _context.Authors.Remove(author);
+                
+                _fileManager.Delete(author.Photo);
                 await _context.SaveChangesAsync(cancellationToken);
 
                 return BaseResponseModel<Unit>.Success(Unit.Value,"Yazar başarıyla silindi.");

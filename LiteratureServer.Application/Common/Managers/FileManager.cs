@@ -13,6 +13,16 @@ public class FileManager
         _hostingEnvironment = hostingEnvironment;
     }
 
+    public void Delete(string mainUrl)
+    {
+        var path = Path.Combine(_hostingEnvironment.ContentRootPath, mainUrl);
+        
+        if(File.Exists(path))
+        {
+            File.Delete(path);
+        }
+    }
+
     public string Upload(IFormFile? file, FileRoot root)
     {
         string uploadFolder = Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot", root.ToString());
