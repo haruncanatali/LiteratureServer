@@ -30,8 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Authors\Queries\GetAuthor\" />
-    <Folder Include="Authors\Queries\GetAuthors\" />
     <Folder Include="Users\Queries\Dtos\" />
   </ItemGroup>
 

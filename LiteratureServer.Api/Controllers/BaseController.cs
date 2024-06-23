@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LiteratureServer.Api.Controllers;
 
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 public abstract class BaseController : ControllerBase
 {

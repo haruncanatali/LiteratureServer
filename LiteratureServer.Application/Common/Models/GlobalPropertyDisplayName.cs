@@ -22,4 +22,20 @@ public static class GlobalPropertyDisplayName
     public static readonly string AuthorBio = "Yazar Biyografisi";
     public static readonly string AuthorPhoto = "Yazar Fotoğrafı";
 
+    public static readonly string PeriodId = "Dönem ID";
+    public static readonly string PeriodName = "Dönem Adı";
+    public static readonly string PeriodDescripton = "Dönem Açıklaması";
+
+    public static readonly string LiteraryTypeId = "Edebi Tür ID";
+    public static readonly string LiteraryTypeName = "Edebi Tür Adı";
+    public static readonly string LiteraryTypeDescription = "Edebi Tür Açıklaması";
+
+    public static readonly string LiteraryId = "Eser ID";
+    public static readonly string LiteraryName = "Eser Adı";
+    public static readonly string LiteraryDescription = "Eser Açıklaması";
+    public static readonly string LiteraryPageCount = "Eser Sayfa Sayısı";
+    public static readonly string LiteraryLiteraryTypeId = "Eser Türü ID";
+    public static readonly string LiteraryAuthorId = "Eser Yazar ID";
+    public static readonly string LiteraryPeriodId = "Eser Dönem ID";
+
 }
