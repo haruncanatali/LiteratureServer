@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LiteratureServer.Application.Common.Exceptions;
 using LiteratureServer.Application.Common.Interfaces;
 using LiteratureServer.Application.Common.Models;
+using LiteratureServer.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace LiteratureServer.Application.Authors.Commands.Delete
 {
@@ -24,7 +27,25 @@ namespace LiteratureServer.Application.Authors.Commands.Delete
 
             public async Task<BaseResponseModel<Unit>> Handle(DeleteAuthorCommand request, CancellationToken cancellationToken)
             {
-                
+                Author? author = await _context.Authors
+                    .Include(c=>c.Literaries)
+                    .FirstOrDefaultAsync(c => c.Id == request.AuthorId, cancellationToken: cancellationToken);
+
+                if (author == null)
+                {
+                    throw new NotFoundException("Silinecek yazar bulunamadı.");
+                }
+
+                if (author.Literaries is {Count: > 0})
+                {
+                    _context.Literaries.RemoveRange(author.Literaries);
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+
+                _context.Authors.Remove(author);
+                await _context.SaveChangesAsync(cancellationToken);
+
+                return BaseResponseModel<Unit>.Success(Unit.Value,"Yazar başarıyla silindi.");
             }
         }
     }
